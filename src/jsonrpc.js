@@ -154,7 +154,7 @@ Client.prototype.connectHttp = function connectHttp(method, params, opts, callba
   // Now we'll make a request to the server
   var request = client.request('POST', opts.path || '/', headers);
   request.write(requestJSON);
-  request.on('response', callback.bind(this, id, request));
+  request.on('response', callback.bind(this, null, id, request));
 };
 
 /**
