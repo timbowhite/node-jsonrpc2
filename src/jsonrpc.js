@@ -210,8 +210,12 @@ Client.prototype.stream = function (method, params, opts, callback)
   }
   opts = opts || {};
 
-  this.connectHttp(method, params, opts, function (id, request, response) {
+  this.connectHttp(method, params, opts, function (err, id, request, response) {
     if ("function" === typeof callback) {
+      if (err){
+        callback(err);
+        return;
+      }
       var connection = new events.EventEmitter();
       connection.id = id;
       connection.req = request;
@@ -269,7 +273,11 @@ Client.prototype.call = function (method, params, opts, callback)
     opts = {};
   }
   opts = opts || {};
-  this.connectHttp(method, params, opts, function (id, request, response) {
+  this.connectHttp(method, params, opts, function (err, id, request, response) {
+    if (err && "function" === typeof callback){
+      callback(err);
+      return;
+    }
     var data = '';
     response.on('data', function (chunk) {
       data += chunk;
